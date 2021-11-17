@@ -2,20 +2,8 @@
   <card class="flex flex-col nova-detached-filters-card">
     <div class="px-3 py-4 detached-filters" :class="{ collapsed: isCollapsed }">
       <div class="flex flex-wrap" :class="getWidth(item)" v-for="item in card.filters" :key="item.key">
-        <!-- Single Filter -->
         <nova-detached-filter
-          v-if="isFilterComponent(item)"
-          :width="'w-full'"
-          :filter="item"
-          :resource-name="resourceName"
-          @handle-filter-changed="handleFilterChanged"
-          @reset-filter="resetFilter"
-        />
-
-        <!-- Filter Column -->
-        <nova-detached-filter
-          v-else
-          v-for="filter in item.filters"
+          v-for="filter in itemFilters(item)"
           v-bind:key="filter.key"
           :width="getWidth(filter)"
           :filter="filter"
@@ -26,7 +14,7 @@
       </div>
     </div>
     <div class="detached-filters-buttons">
-      <div class="detached-filters-button per-page-button" v-if="hasPerPageOptions">
+      <div class="per-page-button" v-if="hasPerPageOptions">
         <select
           name="detached-per-page-select"
           slot="select"
@@ -39,15 +27,20 @@
           </option>
         </select>
       </div>
-      <div class="detached-filters-button" v-if="card.withReset" @click="clearAllFilters()">
-        <filter-icon/>
-      </div>
-      <div class="detached-filters-button" v-if="card.persistFilters" @click="toggleIsPersisting">
-        <persist-filter-icon :class="{ active: isPersisting }"/>
-      </div>
-      <div class="detached-filters-button" v-if="card.withToggle" @click="toggleIsCollapsed">
-        <collapse-icon :class="{ collapsed: isCollapsed }"/>
-      </div>
+      <filter-icon
+        v-if="card.withReset"
+        @click.native="clearAllFilters()"
+      />
+      <persist-filter-icon
+        v-if="card.persistFilters"
+        @click.native="toggleIsPersisting"
+        :class="{ active: isPersisting }"
+      />
+      <collapse-icon
+        v-if="card.withToggle"
+        @click.native="toggleIsCollapsed"
+        :class="{ collapsed: isCollapsed }"
+      />
     </div>
   </card>
 </template>
@@ -67,14 +60,13 @@ export default {
     persistedFilters: JSON.parse(localStorage.getItem('PERSISTED_DETACHED_FILTERS')),
     persistedResources: JSON.parse(localStorage.getItem('PERSIST_DETACHED_FILTERS')),
     collapsedResources: JSON.parse(localStorage.getItem('COLLAPSED_DETACHED_FILTERS')),
-
     isPersisting: false,
     isCollapsed: false,
   }),
 
   created() {
-    this.initialiseIsPersisting();
-    this.initialiseIsCollapsed();
+    this.initializeIsPersisting();
+    this.initializeIsCollapsed();
 
     if (this.isPersisting) {
       if (this.persistedFilters && this.persistedFilters[this.resourceName]) this.loadPersistedFilters();
@@ -91,9 +83,15 @@ export default {
   },
 
   methods: {
+    itemFilters(item) {
+      if (item.name === 'detached-filter-column') {
+        return item.filters
+      }
+      return [item]
+    },
+
     getWidth(filter) {
-      if (filter.width) return filter.width;
-      return 'w-auto';
+      return filter.width || 'w-auto';
     },
 
     resetFilter(filter) {
@@ -103,10 +101,6 @@ export default {
       });
 
       this.handleFilterChanged(filter);
-    },
-
-    isFilterComponent(item) {
-      return !!item.options && !!item.component;
     },
 
     toggleIsPersisting() {
@@ -234,13 +228,13 @@ export default {
       if (addStyle) this.perPageStyle.appendChild(document.createTextNode(css));
     },
 
-    initialiseIsPersisting() {
+    initializeIsPersisting() {
       if (!this.persistedResources || !this.persistedResources[this.resourceName])
         return (this.isPersisting = this.card.persistFiltersDefault);
       this.isPersisting = this.persistedResources[this.resourceName];
     },
 
-    initialiseIsCollapsed() {
+    initializeIsCollapsed() {
       if (!this.collapsedResources || !this.collapsedResources[this.resourceName]) return (this.isCollapsed = false);
       this.isCollapsed = this.collapsedResources[this.resourceName];
     },
@@ -342,7 +336,7 @@ export default {
     top: -2rem;
     right: 0;
 
-    .detached-filters-button {
+    >div {
       padding: 0.5rem 0.6rem;
       background-color: var(--white);
       display: flex;

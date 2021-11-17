@@ -149,13 +149,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -179,8 +172,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   created: function created() {
-    this.initialiseIsPersisting();
-    this.initialiseIsCollapsed();
+    this.initializeIsPersisting();
+    this.initializeIsCollapsed();
 
     if (this.isPersisting) {
       if (this.persistedFilters && this.persistedFilters[this.resourceName]) this.loadPersistedFilters();else this.initializePersistedFilters();
@@ -193,9 +186,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     if (!this.card.showPerPageInMenu) this.perPageDropdownStyle(false);
   },
   methods: {
+    itemFilters: function itemFilters(item) {
+      if (item.name === 'detached-filter-column') {
+        return item.filters;
+      }
+
+      return [item];
+    },
     getWidth: function getWidth(filter) {
-      if (filter.width) return filter.width;
-      return 'w-auto';
+      return filter.width || 'w-auto';
     },
     resetFilter: function resetFilter(filter) {
       this.$store.commit("".concat(this.resourceName, "/updateFilterState"), {
@@ -203,9 +202,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: null
       });
       this.handleFilterChanged(filter);
-    },
-    isFilterComponent: function isFilterComponent(item) {
-      return !!item.options && !!item.component;
     },
     toggleIsPersisting: function toggleIsPersisting() {
       if (!this.persistedResources) this.persistedResources = {};
@@ -318,11 +314,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       addStyle ? head.appendChild(this.perPageStyle) : head.removeChild(this.perPageStyle);
       if (addStyle) this.perPageStyle.appendChild(document.createTextNode(css));
     },
-    initialiseIsPersisting: function initialiseIsPersisting() {
+    initializeIsPersisting: function initializeIsPersisting() {
       if (!this.persistedResources || !this.persistedResources[this.resourceName]) return this.isPersisting = this.card.persistFiltersDefault;
       this.isPersisting = this.persistedResources[this.resourceName];
     },
-    initialiseIsCollapsed: function initialiseIsCollapsed() {
+    initializeIsCollapsed: function initializeIsCollapsed() {
       if (!this.collapsedResources || !this.collapsedResources[this.resourceName]) return this.isCollapsed = false;
       this.isCollapsed = this.collapsedResources[this.resourceName];
     }
@@ -572,7 +568,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".nova-detached-filters-card {\n  height: auto;\n  position: relative;\n}\n.nova-detached-filters-card .detached-filters {\n  display: flex;\n  flex-wrap: wrap;\n  max-height: 100vh;\n  opacity: 1;\n  z-index: 10;\n  transition: all 0.5s cubic-bezier(0.6, 0.4, 0.1, 0.9);\n  will-change: max-height, transform, opacity, padding-top, padding-bottom;\n}\n.nova-detached-filters-card .detached-filters.collapsed {\n  opacity: 0;\n  padding-top: 0.5rem;\n  padding-bottom: 0.5rem;\n  transform: translateY(-10%);\n  max-height: 0;\n  overflow: hidden;\n  cursor: default;\n}\n.nova-detached-filters-card .detached-filter {\n  height: auto;\n  opacity: 1;\n}\n.nova-detached-filters-card .detached-filter > div:first-of-type {\n  width: 100%;\n}\n.nova-detached-filters-card .detached-filter h3 {\n  background-color: transparent;\n  text-transform: capitalize;\n  padding: 0.25rem 4rem 0 0.5rem;\n  font-size: 16px;\n  font-weight: 300;\n  font-family: Nunito, system-ui, BlinkMacSystemFont, -apple-system, sans-serif;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.nova-detached-filters-card .detached-filter .reset-filter-btn {\n  position: absolute;\n  right: 0.4rem;\n  top: 0.25rem;\n}\n.nova-detached-filters-card .detached-filters-buttons {\n  position: absolute;\n  display: flex;\n  top: -2rem;\n  right: 0;\n}\n.nova-detached-filters-card .detached-filters-buttons .detached-filters-button {\n  padding: 0.5rem 0.6rem;\n  background-color: var(--white);\n  display: flex;\n  align-items: center;\n}\n.nova-detached-filters-card .detached-filters-buttons .detached-filters-button svg {\n  cursor: pointer;\n}\n.nova-detached-filters-card .detached-filters-buttons .detached-filters-button:last-of-type {\n  border-top-right-radius: 0.25rem;\n}\n.nova-detached-filters-card .detached-filters-buttons .detached-filters-button:first-of-type {\n  border-top-left-radius: 0.25rem;\n}\n.nova-detached-filters-card .detached-filters-buttons .detached-filters-button.per-page-button {\n  padding: 0;\n}\n.nova-detached-filters-card .detached-filters-buttons .detached-filters-button.per-page-button select {\n  border-radius: 0;\n  border-color: transparent;\n}\n.nova-detached-filters-card .detached-filters-buttons .detached-filters-button.per-page-button select:focus {\n  box-shadow: none;\n}\n.nova-detached-filters-card .reset-filter-btn {\n  opacity: 0.6;\n  transition: opacity 0.3s cubic-bezier(0.6, 0.4, 0.1, 0.9);\n  cursor: pointer;\n}\n.nova-detached-filters-card .reset-filter-btn:hover {\n  opacity: 1;\n}", ""]);
+exports.push([module.i, ".nova-detached-filters-card {\n  height: auto;\n  position: relative;\n}\n.nova-detached-filters-card .detached-filters {\n  display: flex;\n  flex-wrap: wrap;\n  max-height: 100vh;\n  opacity: 1;\n  z-index: 10;\n  transition: all 0.5s cubic-bezier(0.6, 0.4, 0.1, 0.9);\n  will-change: max-height, transform, opacity, padding-top, padding-bottom;\n}\n.nova-detached-filters-card .detached-filters.collapsed {\n  opacity: 0;\n  padding-top: 0.5rem;\n  padding-bottom: 0.5rem;\n  transform: translateY(-10%);\n  max-height: 0;\n  overflow: hidden;\n  cursor: default;\n}\n.nova-detached-filters-card .detached-filter {\n  height: auto;\n  opacity: 1;\n}\n.nova-detached-filters-card .detached-filter > div:first-of-type {\n  width: 100%;\n}\n.nova-detached-filters-card .detached-filter h3 {\n  background-color: transparent;\n  text-transform: capitalize;\n  padding: 0.25rem 4rem 0 0.5rem;\n  font-size: 16px;\n  font-weight: 300;\n  font-family: Nunito, system-ui, BlinkMacSystemFont, -apple-system, sans-serif;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.nova-detached-filters-card .detached-filter .reset-filter-btn {\n  position: absolute;\n  right: 0.4rem;\n  top: 0.25rem;\n}\n.nova-detached-filters-card .detached-filters-buttons {\n  position: absolute;\n  display: flex;\n  top: -2rem;\n  right: 0;\n}\n.nova-detached-filters-card .detached-filters-buttons > div {\n  padding: 0.5rem 0.6rem;\n  background-color: var(--white);\n  display: flex;\n  align-items: center;\n}\n.nova-detached-filters-card .detached-filters-buttons > div svg {\n  cursor: pointer;\n}\n.nova-detached-filters-card .detached-filters-buttons > div:last-of-type {\n  border-top-right-radius: 0.25rem;\n}\n.nova-detached-filters-card .detached-filters-buttons > div:first-of-type {\n  border-top-left-radius: 0.25rem;\n}\n.nova-detached-filters-card .detached-filters-buttons > div.per-page-button {\n  padding: 0;\n}\n.nova-detached-filters-card .detached-filters-buttons > div.per-page-button select {\n  border-radius: 0;\n  border-color: transparent;\n}\n.nova-detached-filters-card .detached-filters-buttons > div.per-page-button select:focus {\n  box-shadow: none;\n}\n.nova-detached-filters-card .reset-filter-btn {\n  opacity: 0.6;\n  transition: opacity 0.3s cubic-bezier(0.6, 0.4, 0.1, 0.9);\n  cursor: pointer;\n}\n.nova-detached-filters-card .reset-filter-btn:hover {\n  opacity: 1;\n}", ""]);
 
 // exports
 
@@ -27557,46 +27553,32 @@ var render = function () {
               staticClass: "flex flex-wrap",
               class: _vm.getWidth(item),
             },
-            [
-              _vm.isFilterComponent(item)
-                ? _c("nova-detached-filter", {
-                    attrs: {
-                      width: "w-full",
-                      filter: item,
-                      "resource-name": _vm.resourceName,
-                    },
-                    on: {
-                      "handle-filter-changed": _vm.handleFilterChanged,
-                      "reset-filter": _vm.resetFilter,
-                    },
-                  })
-                : _vm._l(item.filters, function (filter) {
-                    return _c("nova-detached-filter", {
-                      key: filter.key,
-                      attrs: {
-                        width: _vm.getWidth(filter),
-                        filter: filter,
-                        "resource-name": _vm.resourceName,
-                      },
-                      on: {
-                        "handle-filter-changed": _vm.handleFilterChanged,
-                        "reset-filter": _vm.resetFilter,
-                      },
-                    })
-                  }),
-            ],
-            2
+            _vm._l(_vm.itemFilters(item), function (filter) {
+              return _c("nova-detached-filter", {
+                key: filter.key,
+                attrs: {
+                  width: _vm.getWidth(filter),
+                  filter: filter,
+                  "resource-name": _vm.resourceName,
+                },
+                on: {
+                  "handle-filter-changed": _vm.handleFilterChanged,
+                  "reset-filter": _vm.resetFilter,
+                },
+              })
+            }),
+            1
           )
         }),
         0
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "detached-filters-buttons" }, [
-        _vm.hasPerPageOptions
-          ? _c(
-              "div",
-              { staticClass: "detached-filters-button per-page-button" },
-              [
+      _c(
+        "div",
+        { staticClass: "detached-filters-buttons" },
+        [
+          _vm.hasPerPageOptions
+            ? _c("div", { staticClass: "per-page-button" }, [
                 _c(
                   "select",
                   {
@@ -27617,54 +27599,43 @@ var render = function () {
                   }),
                   0
                 ),
-              ]
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.card.withReset
-          ? _c(
-              "div",
-              {
-                staticClass: "detached-filters-button",
-                on: {
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.card.withReset
+            ? _c("filter-icon", {
+                nativeOn: {
                   click: function ($event) {
                     return _vm.clearAllFilters()
                   },
                 },
-              },
-              [_c("filter-icon")],
-              1
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.card.persistFilters
-          ? _c(
-              "div",
-              {
-                staticClass: "detached-filters-button",
-                on: { click: _vm.toggleIsPersisting },
-              },
-              [
-                _c("persist-filter-icon", {
-                  class: { active: _vm.isPersisting },
-                }),
-              ],
-              1
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.card.withToggle
-          ? _c(
-              "div",
-              {
-                staticClass: "detached-filters-button",
-                on: { click: _vm.toggleIsCollapsed },
-              },
-              [_c("collapse-icon", { class: { collapsed: _vm.isCollapsed } })],
-              1
-            )
-          : _vm._e(),
-      ]),
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.card.persistFilters
+            ? _c("persist-filter-icon", {
+                class: { active: _vm.isPersisting },
+                nativeOn: {
+                  click: function ($event) {
+                    return _vm.toggleIsPersisting.apply(null, arguments)
+                  },
+                },
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.card.withToggle
+            ? _c("collapse-icon", {
+                class: { collapsed: _vm.isCollapsed },
+                nativeOn: {
+                  click: function ($event) {
+                    return _vm.toggleIsCollapsed.apply(null, arguments)
+                  },
+                },
+              })
+            : _vm._e(),
+        ],
+        1
+      ),
     ]
   )
 }
@@ -27970,26 +27941,28 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "svg",
-    {
-      staticClass: "toggle-filters-btn",
-      attrs: {
-        dusk: "collapse-detached-filters",
-        xmlns: "http://www.w3.org/2000/svg",
-        viewBox: "0 0 511.641 511.641",
-        width: "20",
-        height: "16",
-      },
-    },
-    [
-      _c("path", {
+  return _c("div", [
+    _c(
+      "svg",
+      {
+        staticClass: "toggle-filters-btn",
         attrs: {
-          d: "M148.32,255.76L386.08,18c4.053-4.267,3.947-10.987-0.213-15.04c-4.16-3.947-10.667-3.947-14.827,0L125.707,248.293    c-4.16,4.16-4.16,10.88,0,15.04L371.04,508.667c4.267,4.053,10.987,3.947,15.04-0.213c3.947-4.16,3.947-10.667,0-14.827    L148.32,255.76z",
+          dusk: "collapse-detached-filters",
+          xmlns: "http://www.w3.org/2000/svg",
+          viewBox: "0 0 511.641 511.641",
+          width: "20",
+          height: "16",
         },
-      }),
-    ]
-  )
+      },
+      [
+        _c("path", {
+          attrs: {
+            d: "M148.32,255.76L386.08,18c4.053-4.267,3.947-10.987-0.213-15.04c-4.16-3.947-10.667-3.947-14.827,0L125.707,248.293    c-4.16,4.16-4.16,10.88,0,15.04L371.04,508.667c4.267,4.053,10.987,3.947,15.04-0.213c3.947-4.16,3.947-10.667,0-14.827    L148.32,255.76z",
+          },
+        }),
+      ]
+    ),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -28013,32 +27986,34 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "svg",
-    {
-      staticClass: "reset-filter-btn",
-      attrs: {
-        dusk: "reset-detached-filters",
-        xmlns: "http://www.w3.org/2000/svg",
-        viewBox: "0 0 512.004 512.004",
-        height: "18",
-        width: "18",
+  return _c("div", [
+    _c(
+      "svg",
+      {
+        staticClass: "reset-filter-btn",
+        attrs: {
+          dusk: "reset-detached-filters",
+          xmlns: "http://www.w3.org/2000/svg",
+          viewBox: "0 0 512.004 512.004",
+          height: "18",
+          width: "18",
+        },
       },
-    },
-    [
-      _c("path", {
-        attrs: {
-          d: "m361.183 0c-54.059 0-99.836 36.049-114.505 85.331h-192.948c-18.024 0-28.614 20.339-18.285 35.119.16.231-5.363-7.31 129.747 177.039 2.714 3.951 4.148 8.57 4.148 13.367v177.688c0 19.435 22.224 30.24 37.473 18.754l57.593-43.518c8.614-6.415 13.754-16.655 13.754-27.409v-125.515c0-4.798 1.435-9.417 4.149-13.369l46.497-63.451c76.139 21.439 151.81-36.022 151.81-114.791.001-65.752-53.577-119.245-119.433-119.245zm-103.192 279.919c-5.835 7.968-9.831 19.1-9.831 30.938 0 136.483.734 127.081-1.68 128.869-1.91 1.421 10.835-8.188-47.14 35.618v-164.488c0-11.012-3.327-21.608-9.622-30.646-.169-.242 4.923 6.71-120.835-164.88h172.938c-1.457 44.852 22.126 84.961 58.678 106.581zm103.192-71.428c-49.314 0-89.434-40.035-89.434-89.246 0-49.21 40.12-89.245 89.434-89.245 49.313 0 89.433 40.035 89.433 89.245.001 49.211-40.119 89.246-89.433 89.246z",
-        },
-      }),
-      _vm._v(" "),
-      _c("path", {
-        attrs: {
-          d: "m400.201 80.298c-5.854-5.864-15.35-5.872-21.213-.02l-17.805 17.773-17.805-17.773c-5.863-5.853-15.361-5.846-21.213.02-5.853 5.862-5.844 15.36.019 21.213l17.767 17.735-17.767 17.735c-5.863 5.853-5.872 15.351-.019 21.213 5.833 5.844 15.331 5.891 21.213.02l17.805-17.773 17.805 17.773c5.845 5.834 15.343 5.862 21.213-.02 5.853-5.862 5.844-15.36-.019-21.213l-17.767-17.735 17.767-17.735c5.863-5.853 5.872-15.351.019-21.213z",
-        },
-      }),
-    ]
-  )
+      [
+        _c("path", {
+          attrs: {
+            d: "m361.183 0c-54.059 0-99.836 36.049-114.505 85.331h-192.948c-18.024 0-28.614 20.339-18.285 35.119.16.231-5.363-7.31 129.747 177.039 2.714 3.951 4.148 8.57 4.148 13.367v177.688c0 19.435 22.224 30.24 37.473 18.754l57.593-43.518c8.614-6.415 13.754-16.655 13.754-27.409v-125.515c0-4.798 1.435-9.417 4.149-13.369l46.497-63.451c76.139 21.439 151.81-36.022 151.81-114.791.001-65.752-53.577-119.245-119.433-119.245zm-103.192 279.919c-5.835 7.968-9.831 19.1-9.831 30.938 0 136.483.734 127.081-1.68 128.869-1.91 1.421 10.835-8.188-47.14 35.618v-164.488c0-11.012-3.327-21.608-9.622-30.646-.169-.242 4.923 6.71-120.835-164.88h172.938c-1.457 44.852 22.126 84.961 58.678 106.581zm103.192-71.428c-49.314 0-89.434-40.035-89.434-89.246 0-49.21 40.12-89.245 89.434-89.245 49.313 0 89.433 40.035 89.433 89.245.001 49.211-40.119 89.246-89.433 89.246z",
+          },
+        }),
+        _vm._v(" "),
+        _c("path", {
+          attrs: {
+            d: "m400.201 80.298c-5.854-5.864-15.35-5.872-21.213-.02l-17.805 17.773-17.805-17.773c-5.863-5.853-15.361-5.846-21.213.02-5.853 5.862-5.844 15.36.019 21.213l17.767 17.735-17.767 17.735c-5.863 5.853-5.872 15.351-.019 21.213 5.833 5.844 15.331 5.891 21.213.02l17.805-17.773 17.805 17.773c5.845 5.834 15.343 5.862 21.213-.02 5.853-5.862 5.844-15.36-.019-21.213l-17.767-17.735 17.767-17.735c5.863-5.853 5.872-15.351.019-21.213z",
+          },
+        }),
+      ]
+    ),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -28062,26 +28037,28 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "svg",
-    {
-      staticClass: "lock-filters-btn",
-      attrs: {
-        dusk: "lock-detached-filters",
-        xmlns: "http://www.w3.org/2000/svg",
-        viewBox: "0 0 24 24",
-        width: "16",
-        height: "16",
-      },
-    },
-    [
-      _c("path", {
+  return _c("div", [
+    _c(
+      "svg",
+      {
+        staticClass: "lock-filters-btn",
         attrs: {
-          d: "m18.75 9h-.75v-3c0-3.309-2.691-6-6-6s-6 2.691-6 6v3h-.75c-1.24 0-2.25 1.009-2.25 2.25v10.5c0 1.241 1.01 2.25 2.25 2.25h13.5c1.24 0 2.25-1.009 2.25-2.25v-10.5c0-1.241-1.01-2.25-2.25-2.25zm-10.75-3c0-2.206 1.794-4 4-4s4 1.794 4 4v3h-8zm5 10.722v2.278c0 .552-.447 1-1 1s-1-.448-1-1v-2.278c-.595-.347-1-.985-1-1.722 0-1.103.897-2 2-2s2 .897 2 2c0 .737-.405 1.375-1 1.722z",
+          dusk: "lock-detached-filters",
+          xmlns: "http://www.w3.org/2000/svg",
+          viewBox: "0 0 24 24",
+          width: "16",
+          height: "16",
         },
-      }),
-    ]
-  )
+      },
+      [
+        _c("path", {
+          attrs: {
+            d: "m18.75 9h-.75v-3c0-3.309-2.691-6-6-6s-6 2.691-6 6v3h-.75c-1.24 0-2.25 1.009-2.25 2.25v10.5c0 1.241 1.01 2.25 2.25 2.25h13.5c1.24 0 2.25-1.009 2.25-2.25v-10.5c0-1.241-1.01-2.25-2.25-2.25zm-10.75-3c0-2.206 1.794-4 4-4s4 1.794 4 4v3h-8zm5 10.722v2.278c0 .552-.447 1-1 1s-1-.448-1-1v-2.278c-.595-.347-1-.985-1-1.722 0-1.103.897-2 2-2s2 .897 2 2c0 .737-.405 1.375-1 1.722z",
+          },
+        }),
+      ]
+    ),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -28219,8 +28196,7 @@ __webpack_require__.r(__webpack_exports__);
 
 Nova.booting(function (Vue, router, store) {
   Vue.component('nova-detached-filters', _components_Card__WEBPACK_IMPORTED_MODULE_0__["default"]);
-  Vue.component('nova-detached-filter', _components_DetachedFilter__WEBPACK_IMPORTED_MODULE_1__["default"]);
-  Vue.component('filter-menu', _components_FilterMenu__WEBPACK_IMPORTED_MODULE_2__["default"]);
+  Vue.component('nova-detached-filter', _components_DetachedFilter__WEBPACK_IMPORTED_MODULE_1__["default"]); //Vue.component('filter-menu', FilterMenu);
 });
 
 /***/ }),
