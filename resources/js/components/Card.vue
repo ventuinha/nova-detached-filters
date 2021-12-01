@@ -1,11 +1,12 @@
 <template>
   <card class="flex flex-col nova-detached-filters-card">
     <div class="px-3 py-4 detached-filters" :class="{ collapsed: isCollapsed }">
-      <div class="flex flex-wrap" :class="getWidth(item)" v-for="item in card.filters" :key="item.key">
+      <div class="flex flex-wrap" :class="getWidth(item)" v-for="item in cardFilters" :key="item.key">
         <nova-detached-filter
           v-for="filter in itemFilters(item)"
           v-bind:key="filter.key"
           :width="getWidth(filter)"
+          v-show="filter.hidden !== true"
           :filter="filter"
           :resource-name="resourceName"
           @handle-filter-changed="handleFilterChanged"
@@ -241,6 +242,9 @@ export default {
   },
 
   computed: {
+    cardFilters(){
+      return this.card.filters
+    },
     pageParameter() {
       return this.viaRelationship ? this.viaRelationship + '_page' : this.resourceName + '_page';
     },
