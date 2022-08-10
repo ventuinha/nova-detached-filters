@@ -1,6 +1,6 @@
 <?php
 
-namespace OptimistDigital\NovaDetachedFilters;
+namespace Outl1ne\NovaDetachedFilters;
 
 use JsonSerializable;
 use Laravel\Nova\Makeable;
@@ -20,9 +20,11 @@ class DetachedFilterColumn implements JsonSerializable
     }
 
     /**
-     * @inheritDoc
+     * Prepare the element for JSON serialization.
+     *
+     * @return array<string, mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'width' => $this->width,

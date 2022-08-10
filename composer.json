@@ -1,5 +1,5 @@
 {
-  "name": "optimistdigital/nova-detached-filters",
+  "name": "outl1ne/nova-detached-filters",
   "description": "This Laravel Nova package allows you to detach filters from the filter dropdown",
   "keywords": [
     "laravel",
@@ -21,33 +21,34 @@
       "role": "Developer"
     },
     {
-      "name": "Optimist Digital",
-      "email": "info@optimistdigital.com",
+      "name": "Outl1ne",
+      "email": "info@outl1ne.com",
       "role": "Maintainer"
     }
   ],
   "require": {
-    "php": ">=7.1.0",
-    "laravel/nova": "^2.0 || ^3.0"
+    "php": ">=8.0.0",
+    "laravel/nova": "~4.0"
   },
   "require-dev": {
-    "orchestra/testbench": "^6.3",
-    "phpunit/phpunit": "^9.4"
+    "laravel/pint": "^0.2.1",
+    "orchestra/testbench": "^7.0.0",
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
     "psr-4": {
-      "OptimistDigital\\NovaDetachedFilters\\": "src/"
+      "Outl1ne\\NovaDetachedFilters\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "OptimistDigital\\NovaDetachedFilters\\Tests\\": "tests/"
+      "Outl1ne\\NovaDetachedFilters\\Tests\\": "tests/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "OptimistDigital\\NovaDetachedFilters\\CardServiceProvider"
+        "Outl1ne\\NovaDetachedFilters\\CardServiceProvider"
       ]
     }
   },
