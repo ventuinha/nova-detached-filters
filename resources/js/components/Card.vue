@@ -28,32 +28,25 @@
           </option>
         </select>
       </div>
-      <filter-icon
-        v-if="card.withReset"
-        @click.native="clearAllFilters()"
-      />
+      <filter-icon v-if="card.withReset" @click.native="clearAllFilters()" />
       <persist-filter-icon
         v-if="card.persistFilters"
         @click.native="toggleIsPersisting"
         :class="{ active: isPersisting }"
       />
-      <collapse-icon
-        v-if="card.withToggle"
-        @click.native="toggleIsCollapsed"
-        :class="{ collapsed: isCollapsed }"
-      />
+      <collapse-icon v-if="card.withToggle" @click.native="toggleIsCollapsed" :class="{ collapsed: isCollapsed }" />
     </div>
   </card>
 </template>
 
 <script>
-import {Filterable, InteractsWithQueryString, PerPageable} from 'laravel-nova';
-import FilterIcon from "./icons/FilterIcon"
-import PersistFilterIcon from "./icons/PersistFilterIcon";
-import CollapseIcon from "./icons/CollapseIcon";
+import { Filterable, InteractsWithQueryString, PerPageable } from 'laravel-nova';
+import FilterIcon from './icons/FilterIcon';
+import PersistFilterIcon from './icons/PersistFilterIcon';
+import CollapseIcon from './icons/CollapseIcon';
 
 export default {
-  components: {CollapseIcon, PersistFilterIcon, FilterIcon},
+  components: { CollapseIcon, PersistFilterIcon, FilterIcon },
   mixins: [Filterable, InteractsWithQueryString, PerPageable],
   props: ['card', 'resourceName', 'viaResource', 'viaRelationship'],
   data: () => ({
@@ -86,9 +79,9 @@ export default {
   methods: {
     itemFilters(item) {
       if (item.name === 'detached-filter-column') {
-        return item.filters
+        return item.filters;
       }
-      return [item]
+      return [item];
     },
 
     getWidth(filter) {
@@ -242,8 +235,8 @@ export default {
   },
 
   computed: {
-    cardFilters(){
-      return this.card.filters
+    cardFilters() {
+      return this.card.filters;
     },
     pageParameter() {
       return this.viaRelationship ? this.viaRelationship + '_page' : this.resourceName + '_page';
@@ -340,7 +333,7 @@ export default {
     top: -2rem;
     right: 0;
 
-    >div {
+    > div {
       padding: 0.5rem 0.6rem;
       background-color: var(--white);
       display: flex;
@@ -382,6 +375,5 @@ export default {
       opacity: 1;
     }
   }
-
 }
 </style>
